@@ -6,9 +6,6 @@ import java.util.Optional;
 import org.isdb.StudentCRUD.dto.CreateStudentDto;
 import org.isdb.StudentCRUD.model.Student;
 import org.isdb.StudentCRUD.service.StudentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,16 +22,12 @@ import jakarta.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(value = "/student")
 public class StudentController {
-	private static final Logger log = LoggerFactory.getLogger(StudentController.class);
 
-	@Autowired // Field injection
 	private StudentService service;
 
-	// Dependency injection
-	// Constructor injection
-	// public StudentController(StudentService service) {
-	// this.service = service;
-	// }
+	public StudentController(StudentService service) {
+		this.service = service;
+	}
 
 	@PostMapping
 	public Student saveStudent(@RequestBody CreateStudentDto studentDto) {
@@ -43,7 +36,6 @@ public class StudentController {
 
 	@GetMapping
 	public List<Student> getStudents() {
-		log.info("Calling getStudents");
 		return service.getStudents();
 	}
 
