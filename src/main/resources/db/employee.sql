@@ -1,0 +1,10 @@
+CREATE TABLE EmployeeSB (
+    id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR2(255) NOT NULL,
+    email VARCHAR2(255) UNIQUE NOT NULL,
+    designation VARCHAR2(100),
+    age NUMBER(3),
+    address VARCHAR2(500),
+    dob DATE,
+    salary NUMBER(10,2)
+);
