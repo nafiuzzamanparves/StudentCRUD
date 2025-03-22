@@ -35,7 +35,8 @@ public class StudentController {
 
 	@PostMapping
 	public Student saveStudent(@RequestBody CreateStudentDto studentDto) {
-		return service.saveStudent(new Student(studentDto));
+		// return service.saveStudent(new Student(studentDto));
+		return null;
 	}
 
 	@GetMapping
@@ -62,14 +63,14 @@ public class StudentController {
 			if (st.getAddress() != studentDto.getAddress())
 				st.setAddress(studentDto.getAddress());
 
-			if (st.getAge() != studentDto.getAge())
-				st.setAge(studentDto.getAge());
+			// if (st.getAge() != studentDto.getAge())
+			// 	st.setAge(studentDto.getAge());
 
-			if (st.getClazz() != studentDto.getClazz())
-				st.setClazz(studentDto.getClazz());
+			// if (st.getClazz() != studentDto.getClazz())
+			// 	st.setClazz(studentDto.getClazz());
 
-			if (st.getDob() != studentDto.getDob())
-				st.setDob(studentDto.getDob());
+			// if (st.getDob() != studentDto.getDob())
+			// 	st.setDob(studentDto.getDob());
 		}
 
 		return service.saveStudent(st);
