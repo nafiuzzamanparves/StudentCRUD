@@ -6,9 +6,8 @@ import java.util.Optional;
 import org.isdb.StudentCRUD.dto.CreateStudentDto;
 import org.isdb.StudentCRUD.model.Student;
 import org.isdb.StudentCRUD.service.StudentService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,20 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/student")
 public class StudentController {
-	private static final Logger log = LoggerFactory.getLogger(StudentController.class);
 
-	@Autowired // Field injection
+	@Value("${iqram.env}")
+	private String env;
+
+	@Autowired
 	private StudentService service;
-
-	// Dependency injection
-	// Constructor injection
-	// public StudentController(StudentService service) {
-	// this.service = service;
-	// }
 
 	@PostMapping
 	public Student saveStudent(@RequestBody CreateStudentDto studentDto) {
@@ -85,5 +82,10 @@ public class StudentController {
 		System.out.println("Host Name : " + hostName);
 		List<Student> students = service.getStudentsByName(name);
 		return students;
+	}
+
+	@GetMapping("/hello")
+	public String hello() {
+		return "Hello " + env;
 	}
 }
