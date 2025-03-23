@@ -1,0 +1,35 @@
+Student
+    id - mandatory
+    name - mandatory
+    email - optional (unique)
+    class - mandatory
+    roll - mandatory
+    book - mandatory
+    phone - mandatory
+    address - optional
+    gender - mandatory
+    dob - optional
+
+Class
+    id - mandatory
+    name - mandatory
+    classTeacher - mandatory
+    roomNumber - mandatory (unique)
+
+Teacher
+    id - mandatory
+    name - mandatory
+    email - mandatory (unique)
+    gender - mandatory
+    address - mandatory
+    phone - mandatory
+    joiningDate - mandatory
+    salary - mandatory
+    maritalStatus - mandatory
+
+Book
+   id - mandatory
+   name - mandatory
+   author - optional
+   publisher - optional
+   class - mandatory

@@ -25,7 +25,7 @@ public class Student {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
+	private Integer id;
 
 	@Column(nullable = false, length = 30)
 	private String name;
@@ -35,7 +35,7 @@ public class Student {
 
 	@OneToOne
 	@JoinColumn(name = "clazz", referencedColumnName = "id", nullable = false)
-	private Class clazz;
+	private StudentClass clazz;
 
 	@Column(nullable = false, length = 30, unique = true)
 	private Integer roll;
