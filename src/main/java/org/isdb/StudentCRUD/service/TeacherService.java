@@ -1,5 +1,6 @@
 package org.isdb.StudentCRUD.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.isdb.StudentCRUD.model.Teacher;
@@ -66,4 +67,14 @@ public class TeacherService {
         }
     }
 
+    public List<Teacher> saveAllTeacher(List<Teacher> teachers) {
+        List<Teacher> list = new ArrayList<>();
+
+        for (Teacher teacher : teachers) {
+            Teacher saved = saveTeacher(teacher);
+            list.add(saved);
+        }
+
+        return list;
+    }
 }

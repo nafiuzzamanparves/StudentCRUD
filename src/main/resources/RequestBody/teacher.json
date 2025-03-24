@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Sahidur Rahman",
+    "email": "sahidur1@mail.com",
+    "gender": "Male",
+    "address": "Dhaka",
+    "phone": "02588527",
+    "joiningDate": "2014-05-12",
+    "salary": 80000,
+    "isMarried": false
+  },
+  {
+    "name": "Aminul Islam",
+    "email": "aminul@mail.com",
+    "gender": "Male",
+    "address": "Chittagong",
+    "phone": "01711223344",
+    "joiningDate": "2015-08-22",
+    "salary": 75000,
+    "isMarried": true
+  },
+  {
+    "name": "Rahima Begum",
+    "email": "rahima@mail.com",
+    "gender": "Female",
+    "address": "Sylhet",
+    "phone": "01888776655",
+    "joiningDate": "2018-03-10",
+    "salary": 67000,
+    "isMarried": false
+  },
+  {
+    "name": "Karim Hossain",
+    "email": "karim@mail.com",
+    "gender": "Male",
+    "address": "Rajshahi",
+    "phone": "01999887766",
+    "joiningDate": "2012-11-05",
+    "salary": 90000,
+    "isMarried": true
+  },
+  {
+    "name": "Shamima Akter",
+    "email": "shamima@mail.com",
+    "gender": "Female",
+    "address": "Barisal",
+    "phone": "01766778899",
+    "joiningDate": "2016-06-18",
+    "salary": 72000,
+    "isMarried": false
+  },
+  {
+    "name": "Tanvir Hasan",
+    "email": "tanvir@mail.com",
+    "gender": "Male",
+    "address": "Khulna",
+    "phone": "01333221144",
+    "joiningDate": "2019-09-30",
+    "salary": 65000,
+    "isMarried": true
+  },
+  {
+    "name": "Nasima Khatun",
+    "email": "nasima@mail.com",
+    "gender": "Female",
+    "address": "Mymensingh",
+    "phone": "01655443322",
+    "joiningDate": "2017-12-20",
+    "salary": 77000,
+    "isMarried": false
+  },
+  {
+    "name": "Jahid Hasan",
+    "email": "jahid@mail.com",
+    "gender": "Male",
+    "address": "Rangpur",
+    "phone": "01811223344",
+    "joiningDate": "2013-04-25",
+    "salary": 88000,
+    "isMarried": true
+  },
+  {
+    "name": "Farhana Jannat",
+    "email": "farhana@mail.com",
+    "gender": "Female",
+    "address": "Comilla",
+    "phone": "01799887755",
+    "joiningDate": "2020-07-15",
+    "salary": 68000,
+    "isMarried": false
+  },
+  {
+    "name": "Mahbub Alam",
+    "email": "mahbub@mail.com",
+    "gender": "Male",
+    "address": "Jessore",
+    "phone": "01922334455",
+    "joiningDate": "2011-10-08",
+    "salary": 95000,
+    "isMarried": true
+  }
+]
