@@ -12,7 +12,7 @@ Student
 
 Class
     id - mandatory
-    name - mandatory
+    name - mandatory (unique)
     classTeacher - mandatory
     roomNumber - mandatory (unique)
 

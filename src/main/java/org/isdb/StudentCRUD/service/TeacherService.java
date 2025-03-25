@@ -1,11 +1,11 @@
 package org.isdb.StudentCRUD.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.isdb.StudentCRUD.model.Teacher;
 import org.isdb.StudentCRUD.repository.TeacherRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TeacherService {

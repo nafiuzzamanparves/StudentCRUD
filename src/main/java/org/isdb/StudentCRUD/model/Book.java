@@ -8,14 +8,7 @@ package org.isdb.StudentCRUD.model;
    class - mandatory
  */
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,25 +21,25 @@ import lombok.Setter;
 @Entity(name = "T_BOOK")
 public class Book {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-	@Column(nullable = false, length = 100)
-	private String name;
+    @Column(nullable = false, length = 100)
+    private String name;
 
-	@Column(nullable = false, length = 100)
-	private String author;
+    @Column(nullable = false, length = 100)
+    private String author;
 
-	@Column(nullable = false, length = 100)
-	private String publisher;
+    @Column(nullable = false, length = 100)
+    private String publisher;
 
-//	@Transient
-	@OneToOne
-	@JoinColumn(name = "clazz", referencedColumnName = "id")
-	private StudentClass clazz;
+    // @Transient
+    @OneToOne
+    @JoinColumn(name = "clazz", referencedColumnName = "id")
+    private StudentClass clazz;
 
-	@ManyToOne
-	@JoinColumn(name = "student", nullable = false)
-	private Student student;
+    @ManyToOne
+    @JoinColumn(name = "student", nullable = false)
+    private Student student;
 }

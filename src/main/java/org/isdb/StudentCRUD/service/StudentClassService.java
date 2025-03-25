@@ -1,13 +1,13 @@
 package org.isdb.StudentCRUD.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import org.isdb.StudentCRUD.dto.StudentClassDTO;
 import org.isdb.StudentCRUD.model.StudentClass;
 import org.isdb.StudentCRUD.model.Teacher;
 import org.isdb.StudentCRUD.repository.StudentClassReposiroty;
-import org.isdb.StudentCRUD.dto.StudentClassDTO;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentClassService {
