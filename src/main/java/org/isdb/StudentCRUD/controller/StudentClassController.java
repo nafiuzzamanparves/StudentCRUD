@@ -1,6 +1,7 @@
 package org.isdb.StudentCRUD.controller;
 
 import jakarta.validation.Valid;
+import org.isdb.StudentCRUD.dao.ClassTeacherProjection;
 import org.isdb.StudentCRUD.dto.StudentClassDTO;
 import org.isdb.StudentCRUD.model.StudentClass;
 import org.isdb.StudentCRUD.service.StudentClassService;
@@ -45,6 +46,11 @@ public class StudentClassController {
     @PutMapping("/{id}")
     public StudentClass updateStudentClass(@PathVariable Integer id, @RequestBody StudentClassDTO classDTO) {
         return studentClassService.updateStudentClass(id, classDTO);
+    }
+
+    @GetMapping("/getAllClassTeacher")
+    public List<ClassTeacherProjection> getAllClassTeachers() {
+        return studentClassService.getAllClassTeacher();
     }
 
 }

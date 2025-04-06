@@ -18,7 +18,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "T_BOOK")
+@Entity
+@Table(name = "T_BOOK")
 public class Book {
 
     @Id

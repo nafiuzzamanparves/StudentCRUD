@@ -15,7 +15,8 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "T_TEACHER")
+@Entity
+@Table(name = "T_TEACHER")
 public class Teacher {
 
     @Id
