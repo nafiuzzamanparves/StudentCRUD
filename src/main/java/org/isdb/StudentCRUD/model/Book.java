@@ -8,11 +8,15 @@ package org.isdb.StudentCRUD.model;
    class - mandatory
  */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,12 +39,11 @@ public class Book {
     @Column(nullable = false, length = 100)
     private String publisher;
 
-    // @Transient
-    @OneToOne
-    @JoinColumn(name = "clazz", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "class_id", nullable = false)
     private StudentClass clazz;
 
-    @ManyToOne
-    @JoinColumn(name = "student", nullable = false)
-    private Student student;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "books")
+    private Set<Student> students = new HashSet<>();
 }

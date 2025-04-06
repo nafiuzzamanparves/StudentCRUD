@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,15 +28,20 @@ public class Student {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "clazz", referencedColumnName = "id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "class_id", nullable = false)
     private StudentClass clazz;
 
     @Column(nullable = false, length = 30, unique = true)
     private Integer roll;
 
-    @OneToMany(mappedBy = "student")
-    private List<Book> books;
+    @ManyToMany
+    @JoinTable(
+            name = "MAP_STUDENT_BOOK",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private Set<Book> books = new HashSet<>();
 
     @Column(nullable = false, length = 17)
     private String phone;
