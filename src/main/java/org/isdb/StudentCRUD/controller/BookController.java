@@ -1,5 +1,7 @@
 package org.isdb.StudentCRUD.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.isdb.StudentCRUD.dto.BookDTO;
 import org.isdb.StudentCRUD.model.Book;
 import org.isdb.StudentCRUD.service.BookService;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/book")
+@Tag(name = "Book Controller", description = "API for book management")
 public class BookController {
 
     private final BookService bookService;
@@ -20,6 +23,7 @@ public class BookController {
     }
 
     @PostMapping
+    @Operation(summary = "Save book to DB", description = "Save book to DB description")
     public ResponseEntity<Book> saveBook(@RequestBody BookDTO bookDTO) {
         Book saved = bookService.saveBook(bookDTO);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);

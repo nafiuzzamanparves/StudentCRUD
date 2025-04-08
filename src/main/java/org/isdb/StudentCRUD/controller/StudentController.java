@@ -1,5 +1,6 @@
 package org.isdb.StudentCRUD.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.isdb.StudentCRUD.dto.StudentDTO;
 import org.isdb.StudentCRUD.model.Student;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/student")
+@Tag(name = "Student Controller", description = "API for student management")
 public class StudentController {
 
     private final StudentService studentService;

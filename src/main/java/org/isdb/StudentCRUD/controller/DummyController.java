@@ -1,10 +1,12 @@
 package org.isdb.StudentCRUD.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 @RestController // REST(json), SOAP(xml), RPC,...
 @RequestMapping
-@CrossOrigin(origins = "http://localhost:4500") // CSRF
+@CrossOrigin(origins = "http://localhost:4500") // CORS
+@Tag(name = "Dummy Controller", description = "Test APIs")
 public class DummyController {
 
     @GetMapping("/hello") // API endpoint

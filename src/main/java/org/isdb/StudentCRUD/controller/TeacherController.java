@@ -1,5 +1,6 @@
 package org.isdb.StudentCRUD.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.isdb.StudentCRUD.model.Teacher;
 import org.isdb.StudentCRUD.service.TeacherService;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/teacher")
+@Tag(name = "Teacher Controller", description = "API for teacher management")
 public class TeacherController {
 
     private final TeacherService teacherService;

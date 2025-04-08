@@ -74,6 +74,6 @@ public class StudentClassService {
     }
 
     public List<ClassTeacherProjection> getAllClassTeacher() {
-        return studentClassRepository.getAllClassTeacher();
+        return studentClassRepository.fetchAllClassTeacherRawQuery();
     }
 }
