@@ -25,10 +25,12 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF for REST APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/send-email").permitAll()
                         .requestMatchers("/api/user/**").hasAnyRole("REGULAR_USER", "MANAGER", "ADMIN")
                         .requestMatchers("/api/manager/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
@@ -40,14 +42,20 @@ public class SecurityConfig {
         UserDetails regularUser = User.builder()
                 .username("user")
                 .password(passwordEncoder().encode("user123"))
-                .roles("REGULAR_USER")
+//                .roles("REGULAR_USER")
+                .authorities("ROLE_REGULAR_USER", "SENIOR")
                 .build();
+
+        System.out.println(regularUser.getAuthorities());
 
         UserDetails hemel = User.builder()
                 .username("hemel")
                 .password(passwordEncoder().encode("hemel123"))
-                .roles("REGULAR_USER")
+//                .roles("REGULAR_USER")
+                .authorities("ROLE_REGULAR_USER", "JUNIOR")
                 .build();
+
+        System.out.println(hemel.getAuthorities());
 
         // Manager with intermediate access
         String manager123 = passwordEncoder().encode("manager123");
@@ -57,6 +65,8 @@ public class SecurityConfig {
                 .password(manager123)
                 .roles("MANAGER")
                 .build();
+
+        System.out.println(manager.getAuthorities());
 
         // Admin with full access
         UserDetails admin = User.builder()
