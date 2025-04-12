@@ -20,49 +20,57 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF for REST APIs
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/api/public/**").permitAll()
-						.requestMatchers("/api/user/**").hasAnyRole("REGULAR_USER", "MANAGER", "ADMIN")
-						.requestMatchers("/api/manager/**").hasAnyRole("MANAGER", "ADMIN")
-						.requestMatchers("/api/admin/**").hasRole("ADMIN")
-						.anyRequest().authenticated())
-				.httpBasic(Customizer.withDefaults());
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF for REST APIs
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/public/**").permitAll()
+                        .requestMatchers("/api/user/**").hasAnyRole("REGULAR_USER", "MANAGER", "ADMIN")
+                        .requestMatchers("/api/manager/**").hasAnyRole("MANAGER", "ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults());
 
-		return http.build();
-	}
+        return http.build();
+    }
 
-	@Bean
-	public UserDetailsService userDetailsService() {
-		// Regular user with basic access
-		UserDetails regularUser = User.builder()
-				.username("user")
-				.password(passwordEncoder().encode("user123"))
-				.roles("REGULAR_USER")
-				.build();
+    @Bean
+    public UserDetailsService userDetailsService() {
+        // Regular user with basic access
+        UserDetails regularUser = User.builder()
+                .username("user")
+                .password(passwordEncoder().encode("user123"))
+                .roles("REGULAR_USER")
+                .build();
 
-		// Manager with intermediate access
-		UserDetails manager = User.builder()
-				.username("manager")
-				.password(passwordEncoder().encode("manager123"))
-				.roles("MANAGER")
-				.build();
+        UserDetails hemel = User.builder()
+                .username("hemel")
+                .password(passwordEncoder().encode("hemel123"))
+                .roles("REGULAR_USER")
+                .build();
 
-		// Admin with full access
-		UserDetails admin = User.builder()
-				.username("admin")
-				.password(passwordEncoder().encode("admin123"))
-				.roles("ADMIN")
-				.build();
+        // Manager with intermediate access
+        String manager123 = passwordEncoder().encode("manager123");
+        System.out.println(manager123);
+        UserDetails manager = User.builder()
+                .username("manager")
+                .password(manager123)
+                .roles("MANAGER")
+                .build();
 
-		return new InMemoryUserDetailsManager(regularUser, manager, admin);
-	}
+        // Admin with full access
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder().encode("admin123"))
+                .roles("ADMIN")
+                .build();
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+        return new InMemoryUserDetailsManager(regularUser, hemel, manager, admin);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 }
