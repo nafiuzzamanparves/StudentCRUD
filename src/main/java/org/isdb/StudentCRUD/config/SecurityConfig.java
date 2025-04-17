@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http
             , JwtTokenProvider jwtTokenProvider) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF for REST APIs
+        http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF for REST APIs, (Method Reference)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/public/**").permitAll()

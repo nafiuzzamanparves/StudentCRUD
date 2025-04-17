@@ -1,5 +1,7 @@
 package org.isdb.StudentCRUD.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.isdb.StudentCRUD.config.JwtTokenProvider;
 import org.isdb.StudentCRUD.model.LoginRequest;
 import org.springframework.http.ResponseEntity;
@@ -29,19 +31,22 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.createToken(authentication);
+        System.out.println("Token: " + jwt);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("token", jwt);
-        response.put("tokenType", "Bearer");
+        Map<String, String> res = new HashMap<>();
+        res.put("token", jwt);
+        res.put("tokenType", "Bearer");
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(res);
     }
 
 }

@@ -31,16 +31,19 @@ public class JwtTokenProvider {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Claims claims = Jwts.claims().setSubject(userDetails.getUsername());
 
+        // Java stream API?
         String authorities = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         claims.put("roles", authorities);
+        claims.put("hemel", "B-Baria");
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
+        // Builder pattern
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
