@@ -3,6 +3,7 @@ package org.isdb.StudentCRUD.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.isdb.StudentCRUD.config.JwtTokenProvider;
+import org.isdb.StudentCRUD.model.CustomUserDetails;
 import org.isdb.StudentCRUD.model.LoginRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,6 +38,11 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
         );
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof CustomUserDetails) {
+            System.out.println("User is instance of CustomUserDetails");
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtTokenProvider.createToken(authentication);
