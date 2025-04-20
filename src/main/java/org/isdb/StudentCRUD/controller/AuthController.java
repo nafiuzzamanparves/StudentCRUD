@@ -7,7 +7,7 @@ import org.isdb.StudentCRUD.config.JwtTokenProvider;
 import org.isdb.StudentCRUD.constants.Role;
 import org.isdb.StudentCRUD.dto.LoginRequest;
 import org.isdb.StudentCRUD.dto.RegisterRequest;
-import org.isdb.StudentCRUD.dto.UserDTO;
+import org.isdb.StudentCRUD.dto.UserResponse;
 import org.isdb.StudentCRUD.model.CustomUserDetails;
 import org.isdb.StudentCRUD.model.User;
 import org.isdb.StudentCRUD.service.UserService;
@@ -58,15 +58,15 @@ public class AuthController {
             User savedUser = userService.createUser(user);
 
             // Create DTO to return (exclude sensitive info)
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(savedUser.getId());
-            userDTO.setEmail(savedUser.getEmail());
-            userDTO.setRole(savedUser.getRole());
-            userDTO.setFirstName(savedUser.getFirstName());
-            userDTO.setLastName(savedUser.getLastName());
-            userDTO.setPhoneNumber(savedUser.getPhoneNumber());
+            UserResponse userResponse = new UserResponse();
+            userResponse.setId(savedUser.getId());
+            userResponse.setEmail(savedUser.getEmail());
+            userResponse.setRole(savedUser.getRole());
+            userResponse.setFirstName(savedUser.getFirstName());
+            userResponse.setLastName(savedUser.getLastName());
+            userResponse.setPhoneNumber(savedUser.getPhoneNumber());
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -78,7 +78,7 @@ public class AuthController {
                                               @Valid @RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
+                    new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -123,14 +123,14 @@ public class AuthController {
             CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
             User user = customUserDetails.user();
 
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(user.getId());
-            userDTO.setEmail(user.getEmail());
-            userDTO.setRole(user.getRole());
-            userDTO.setFirstName(user.getFirstName());
-            userDTO.setLastName(user.getLastName());
+            UserResponse userResponse = new UserResponse();
+            userResponse.setId(user.getId());
+            userResponse.setEmail(user.getEmail());
+            userResponse.setRole(user.getRole());
+            userResponse.setFirstName(user.getFirstName());
+            userResponse.setLastName(user.getLastName());
 
-            return ResponseEntity.ok(userDTO);
+            return ResponseEntity.ok(userResponse);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");

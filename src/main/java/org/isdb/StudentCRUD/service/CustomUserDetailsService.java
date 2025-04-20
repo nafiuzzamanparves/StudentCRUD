@@ -1,8 +1,8 @@
 package org.isdb.StudentCRUD.service;
 
 import jakarta.transaction.Transactional;
-import org.isdb.StudentCRUD.model.User;
 import org.isdb.StudentCRUD.model.CustomUserDetails;
+import org.isdb.StudentCRUD.model.User;
 import org.isdb.StudentCRUD.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

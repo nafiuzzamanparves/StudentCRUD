@@ -2,8 +2,8 @@ package org.isdb.StudentCRUD.service;
 
 import jakarta.transaction.Transactional;
 import org.isdb.StudentCRUD.constants.Role;
-import org.isdb.StudentCRUD.model.User;
 import org.isdb.StudentCRUD.model.CustomUserDetails;
+import org.isdb.StudentCRUD.model.User;
 import org.isdb.StudentCRUD.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -102,19 +102,17 @@ public class UserService {
     }
 
     @Transactional
-    public User changePassword(Long userId, String currentPassword, String newPassword) {
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
-        // Verify current password
         if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             throw new RuntimeException("Current password is incorrect");
         }
 
-        // Set new password
         user.setPassword(passwordEncoder.encode(newPassword));
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public UserDetails loadUserByUsername(String username) {

@@ -5,7 +5,7 @@ import org.isdb.StudentCRUD.annotation.CurrentUser;
 import org.isdb.StudentCRUD.constants.Role;
 import org.isdb.StudentCRUD.dto.PasswordChangeRequest;
 import org.isdb.StudentCRUD.dto.UserCreateRequest;
-import org.isdb.StudentCRUD.dto.UserDTO;
+import org.isdb.StudentCRUD.dto.UserResponse;
 import org.isdb.StudentCRUD.dto.UserUpdateRequest;
 import org.isdb.StudentCRUD.model.User;
 import org.isdb.StudentCRUD.service.UserService;
@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,13 +33,13 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public User user(@CurrentUser User currentUser) {
+    public UserDetails user(@CurrentUser UserDetails currentUser) {
         return currentUser;
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userService.getAllUsers().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -46,7 +47,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.hasUserId(authentication, #id)")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(user -> ResponseEntity.ok(convertToDTO(user)))
                 .orElse(ResponseEntity.notFound().build());
@@ -54,7 +55,7 @@ public class UserController {
 
     @GetMapping("/role/{role}")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserDTO> getUsersByRole(@PathVariable Role role) {
+    public List<UserResponse> getUsersByRole(@PathVariable Role role) {
         return userService.getUsersByRole(role).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -62,7 +63,7 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateRequest userCreateRequest) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserCreateRequest userCreateRequest) {
         User user = new User(
                 userCreateRequest.getEmail(),
                 userCreateRequest.getPassword(),
@@ -78,7 +79,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.hasUserId(authentication, #id)")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
         try {
             User userDetails = new User();
             userDetails.setFirstName(userUpdateRequest.getFirstName());
@@ -112,7 +113,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getCurrentUser(Authentication authentication) {
+    public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
         User currentUser = userService.getCurrentUser(authentication);
         if (currentUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -140,8 +141,8 @@ public class UserController {
     }
 
     // Helper method to convert User entity to UserDTO
-    private UserDTO convertToDTO(User user) {
-        UserDTO dto = new UserDTO();
+    private UserResponse convertToDTO(User user) {
+        UserResponse dto = new UserResponse();
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
