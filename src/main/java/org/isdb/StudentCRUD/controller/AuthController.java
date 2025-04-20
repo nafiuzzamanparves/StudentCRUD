@@ -2,18 +2,25 @@ package org.isdb.StudentCRUD.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.isdb.StudentCRUD.config.JwtTokenProvider;
+import org.isdb.StudentCRUD.constants.Role;
+import org.isdb.StudentCRUD.dto.LoginRequest;
+import org.isdb.StudentCRUD.dto.RegisterRequest;
+import org.isdb.StudentCRUD.dto.UserDTO;
 import org.isdb.StudentCRUD.model.CustomUserDetails;
-import org.isdb.StudentCRUD.model.LoginRequest;
+import org.isdb.StudentCRUD.model.User;
+import org.isdb.StudentCRUD.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,35 +31,117 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
     public AuthController(AuthenticationManager authenticationManager,
-                          JwtTokenProvider jwtTokenProvider) {
+                          JwtTokenProvider jwtTokenProvider,
+                          UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(
+            @Valid @RequestBody RegisterRequest registerRequest
+    ) {
+        try {
+            User user = new User(
+                    registerRequest.getEmail(),
+                    registerRequest.getPassword(),
+                    Role.STUDENT, // Default role for registration
+                    registerRequest.getFirstName(),
+                    registerRequest.getLastName(),
+                    registerRequest.getPhoneNumber()
+            );
+
+            User savedUser = userService.createUser(user);
+
+            // Create DTO to return (exclude sensitive info)
+            UserDTO userDTO = new UserDTO();
+            userDTO.setId(savedUser.getId());
+            userDTO.setEmail(savedUser.getEmail());
+            userDTO.setRole(savedUser.getRole());
+            userDTO.setFirstName(savedUser.getFirstName());
+            userDTO.setLastName(savedUser.getLastName());
+            userDTO.setPhoneNumber(savedUser.getPhoneNumber());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(HttpServletRequest request,
                                               HttpServletResponse response,
-                                              @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
-        );
+                                              @Valid @RequestBody LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
+            );
 
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof CustomUserDetails) {
-            System.out.println("User is instance of CustomUserDetails");
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtTokenProvider.createToken(authentication);
+
+            // Get user details
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userDetails.user();
+
+            // Create response with token and user info
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("token", jwt);
+            responseData.put("tokenType", "Bearer");
+
+            // Add user information
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("id", user.getId());
+            userData.put("email", user.getEmail());
+            userData.put("role", user.getRole());
+            userData.put("firstName", user.getFirstName());
+            userData.put("lastName", user.getLastName());
+
+            responseData.put("user", userData);
+
+            return ResponseEntity.ok(responseData);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid username or password");
         }
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtTokenProvider.createToken(authentication);
-        System.out.println("Token: " + jwt);
-
-        Map<String, String> res = new HashMap<>();
-        res.put("token", jwt);
-        res.put("tokenType", "Bearer");
-
-        return ResponseEntity.ok(res);
     }
 
+    // This endpoint can be called from Angular to check if a token is valid
+    @GetMapping("/validate-token")
+    public ResponseEntity<?> validateToken(HttpServletRequest request) {
+        String jwt = getJwtFromRequest(request);
+
+        if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
+            String username = jwtTokenProvider.getUsernameFromToken(jwt);
+            UserDetails userDetails = userService.loadUserByUsername(username);
+
+            // Return user information
+            CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
+            User user = customUserDetails.user();
+
+            UserDTO userDTO = new UserDTO();
+            userDTO.setId(user.getId());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setRole(user.getRole());
+            userDTO.setFirstName(user.getFirstName());
+            userDTO.setLastName(user.getLastName());
+
+            return ResponseEntity.ok(userDTO);
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token");
+    }
+
+    // Helper method to extract JWT from request
+    private String getJwtFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
 }
