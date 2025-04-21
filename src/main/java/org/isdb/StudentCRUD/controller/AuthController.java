@@ -47,12 +47,12 @@ public class AuthController {
     ) {
         try {
             User user = new User(
-                    registerRequest.getEmail(),
-                    registerRequest.getPassword(),
+                    registerRequest.email(),
+                    registerRequest.password(),
                     Role.STUDENT, // Default role for registration
-                    registerRequest.getFirstName(),
-                    registerRequest.getLastName(),
-                    registerRequest.getPhoneNumber()
+                    registerRequest.firstName(),
+                    registerRequest.lastName(),
+                    registerRequest.phoneNumber()
             );
 
             User savedUser = userService.createUser(user);

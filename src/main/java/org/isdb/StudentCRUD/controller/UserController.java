@@ -65,12 +65,12 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserCreateRequest userCreateRequest) {
         User user = new User(
-                userCreateRequest.getEmail(),
-                userCreateRequest.getPassword(),
-                userCreateRequest.getRole(),
-                userCreateRequest.getFirstName(),
-                userCreateRequest.getLastName(),
-                userCreateRequest.getPhoneNumber()
+                userCreateRequest.email(),
+                userCreateRequest.password(),
+                userCreateRequest.role(),
+                userCreateRequest.firstName(),
+                userCreateRequest.lastName(),
+                userCreateRequest.phoneNumber()
         );
 
         User createdUser = userService.createUser(user);
@@ -82,16 +82,16 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
         try {
             User userDetails = new User();
-            userDetails.setFirstName(userUpdateRequest.getFirstName());
-            userDetails.setLastName(userUpdateRequest.getLastName());
-            userDetails.setEmail(userUpdateRequest.getEmail());
-            userDetails.setPhoneNumber(userUpdateRequest.getPhoneNumber());
+            userDetails.setFirstName(userUpdateRequest.firstName());
+            userDetails.setLastName(userUpdateRequest.lastName());
+            userDetails.setEmail(userUpdateRequest.email());
+            userDetails.setPhoneNumber(userUpdateRequest.phoneNumber());
 
             // Only admin can update roles
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.getAuthorities().stream()
                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                userDetails.setRole(userUpdateRequest.getRole());
+                userDetails.setRole(userUpdateRequest.role());
             }
 
             User updatedUser = userService.updateUser(id, userDetails);
@@ -131,8 +131,8 @@ public class UserController {
             }
 
             userService.changePassword(currentUser.getId(),
-                    request.getCurrentPassword(),
-                    request.getNewPassword());
+                    request.currentPassword(),
+                    request.newPassword());
 
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
