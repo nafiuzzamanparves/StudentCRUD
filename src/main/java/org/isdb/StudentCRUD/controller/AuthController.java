@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.isdb.StudentCRUD.config.JwtTokenProvider;
-import org.isdb.StudentCRUD.constants.Role;
 import org.isdb.StudentCRUD.dto.LoginRequest;
 import org.isdb.StudentCRUD.dto.RegisterRequest;
 import org.isdb.StudentCRUD.dto.UserResponse;
@@ -27,6 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -49,7 +49,7 @@ public class AuthController {
             User user = new User(
                     registerRequest.email(),
                     registerRequest.password(),
-                    Role.STUDENT, // Default role for registration
+                    registerRequest.role(),
                     registerRequest.firstName(),
                     registerRequest.lastName(),
                     registerRequest.phoneNumber()
@@ -90,7 +90,7 @@ public class AuthController {
 
             // Create response with token and user info
             Map<String, Object> responseData = new HashMap<>();
-            responseData.put("token", jwt);
+            responseData.put("access_token", jwt);
             responseData.put("tokenType", "Bearer");
 
             // Add user information
