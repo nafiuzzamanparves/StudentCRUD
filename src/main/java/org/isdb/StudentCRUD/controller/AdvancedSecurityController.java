@@ -17,7 +17,7 @@ public class AdvancedSecurityController {
      * accessible to users with REGULAR_USER role or higher
      */
     @GetMapping("/resources")
-    @PreAuthorize("hasRole('REGULAR_USER')")
+    @PreAuthorize("hasRole('STUDENT')")
     public Map<String, String> getResources() {
         Map<String, String> resources = new HashMap<>();
         resources.put("resource1", "Resource data 1");
