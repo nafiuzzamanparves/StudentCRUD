@@ -1,5 +1,5 @@
 package org.isdb.StudentCRUD.constants;
 
 public enum Role {
-    STUDENT, TEACHER, ADMIN
+    STUDENT, TEACHER, ADMIN, PATIENT, DOCTOR
 }
