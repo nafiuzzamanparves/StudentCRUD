@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Employee {
 
-	private int id;
+	private Integer id;
 	private String name;
 	private String email;
 	private String designation;
@@ -21,5 +21,6 @@ public class Employee {
 	private String address;
 	private LocalDate dob;
 	private double salary;
+    private String image;
 
 }
